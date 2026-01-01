@@ -14,29 +14,6 @@
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "6fa7672d-2d9f-400a-aa40-8b3b2301df64",
-              "name": "countries",
-              "value": "[\"Korea\"]",
-              "type": "array"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        208,
-        0
-      ],
-      "id": "0c0c9f31-5d1f-4518-a916-63b2d7bd0ce6",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {
         "fieldToSplitOut": "countries",
         "options": {
           "destinationFieldName": "country"
@@ -88,7 +65,7 @@
       "credentials": {
         "openAiApi": {
           "id": "Zzf6GhTFYDQZkBZa",
-          "name": "OpenAi account"
+          "name": "openai-api-keys-n8n-animal-runway"
         }
       }
     },
@@ -104,6 +81,26 @@
       ],
       "id": "5d034a76-47cf-4829-bf86-36d6fa810664",
       "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.output[0] }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1184,
+        -112
+      ],
+      "id": "fe7d2e3e-4025-494f-87e0-98be133de241",
+      "name": "download images"
     },
     {
       "parameters": {
@@ -132,13 +129,91 @@
         0
       ],
       "id": "3520fb7b-8c56-4948-90f3-d10cba195737",
-      "name": "HTTP Request",
+      "name": "Seedream4",
       "credentials": {
         "httpBearerAuth": {
           "id": "SZwh1X0P01TTi5Ro",
           "name": "Bearer Auth account"
         }
       }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6fa7672d-2d9f-400a-aa40-8b3b2301df64",
+              "name": "countries",
+              "value": "[\"Korea\"]",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "0c0c9f31-5d1f-4518-a916-63b2d7bd0ce6",
+      "name": "Countries"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/models/bytedance/seedance-1-pro/predictions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Prefer",
+              "value": "wait"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"input\": {\n    \"fps\": 24,\n    \"image\": \"{{ $json.output[0] }}\",\n      \"prompt\": \"The couple stand in a grand palace hall and are walking forward at a very slow, confident, ceremonial pace, almost like slow motion. They walk straight toward the camera in a steady, graceful manner, with elegant posture. They do NOT look at the camera; instead, their gaze moves slightly around the environment, as if entering an important royal event or ballroom filled with people. The noblewoman's face remains perfectly composed and steady, with no sudden movements or exaggerated expressions. The animal maintains a dignified, controlled walk, matching the rhythm of the noblewoman while keeping a formal and respectful distance. Their clothing moves subtly with each step, showing realistic weight and fabric motion. The lighting is dramatic and warm, with reflections from chandeliers and polished marble floors, matching the palace environment in the image. Ultra-smooth camera motion, cinematic depth of field.\"\n    ,\n    \"duration\": 5,\n    \"resolution\": \"720p\",\n    \"aspect_ratio\": \"9:16\",\n    \"camera_fixed\": true\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1168,
+        48
+      ],
+      "id": "d7604944-f76d-4c3d-8a5d-8f9a0bd04ab2",
+      "name": "Seedance",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "SZwh1X0P01TTi5Ro",
+          "name": "REPLICATE_API_TOKEN"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.output }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1376,
+        48
+      ],
+      "id": "3d12097a-2a31-40c5-8f62-1f25bda031cb",
+      "name": "HTTP Request"
     }
   ],
   "pinData": {},
@@ -147,18 +222,7 @@
       "main": [
         [
           {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "node": "Split Out",
+            "node": "Countries",
             "type": "main",
             "index": 0
           }
@@ -202,6 +266,44 @@
       "main": [
         [
           {
+            "node": "Seedream4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seedream4": {
+      "main": [
+        [
+          {
+            "node": "download images",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Seedance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Countries": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seedance": {
+      "main": [
+        [
+          {
             "node": "HTTP Request",
             "type": "main",
             "index": 0
@@ -215,7 +317,7 @@
     "executionOrder": "v1",
     "availableInMCP": false
   },
-  "versionId": "e4f030f3-3319-40e2-a725-b8800abc9db6",
+  "versionId": "b05c533d-ef29-45c9-9c71-bbfda3fb5c45",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "a7d4431609307ce85e4789089295262ee5d2dbebee0e24a6883758a2829b17b1"
