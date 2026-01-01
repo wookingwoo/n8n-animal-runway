@@ -19,7 +19,7 @@
             {
               "id": "6fa7672d-2d9f-400a-aa40-8b3b2301df64",
               "name": "countries",
-              "value": "[\"Spain\", \"Thailand\", \"Korea\", \"Germany\", \"Mexico\"]",
+              "value": "[\"Korea\"]",
               "type": "array"
             }
           ]
@@ -104,6 +104,41 @@
       ],
       "id": "5d034a76-47cf-4829-bf86-36d6fa810664",
       "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/models/bytedance/seedream-4/predictions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Prefer",
+              "value": "wait"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"input\": {\n    \"size\": \"4K\",\n    \"width\": 2048,\n    \"height\": 2048,\n    \"prompt\": \"Cinematic photographic image, lifelike and natural lighting. A towering anthropomorphic {{ $json.output.animal }} with a massively powerful physique, broad shoulders, thick defined musculature and heroic proportions, walking upright like a royal guardian with confident human-like posture. It is dressed in ornate traditional male {{ $json.output.country }} ceremonial attire {{ $json.output.outfit }} tailored to its large, imposing build, using a color palette that clearly reflects {{ $json.output.country }} culture, conveying regal strength and presence. Beside it walks a stunning human noblewoman from {{ $json.output.country }} with a beautifully defined face and refined features, confident expression, realistic skin texture, expressive eyes, and natural flowing hair. She wears a luxurious, form-fitting traditional {{ $json.output.country }} gown designed to emphasize her feminine curves while remaining elegant and dignified, combining elegance and allure - rich fabrics, tasteful neckline, coordinated jewelry, glamorous but refined appearance. Both characters are fully visible: full-body shot, centered, walking forward together in synchronised stride, the {{ $json.output.animal }} protective beside her, its size and strength subtly shielding her. Location: a grand palace interior or ceremonial hall, with ornate architectural details, carved walls, impressive columns, chandeliers or culturally appropriate lighting fixtures, polished marble or ceremonial flooring, warm golden light, refined atmosphere. Photography style: realistic editorial fashion shot, premium beauty focus on the noblewoman's face and presence, crisp detail, natural reflections, clean composition.\",\n    \"max_images\": 1,\n    \"image_input\": [],\n    \"aspect_ratio\": \"9:16\",\n    \"enhance_prompt\": true,\n    \"sequential_image_generation\": \"disabled\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        976,
+        0
+      ],
+      "id": "3520fb7b-8c56-4948-90f3-d10cba195737",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "SZwh1X0P01TTi5Ro",
+          "name": "Bearer Auth account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -158,6 +193,17 @@
           {
             "node": "AI Agent",
             "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
             "index": 0
           }
         ]
