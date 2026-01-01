@@ -84,7 +84,26 @@
         208
       ],
       "id": "6fc9c282-c331-47ea-a0cf-1d60093b29c8",
-      "name": "OpenAI Chat Model"
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Zzf6GhTFYDQZkBZa",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"country\": \"Spain\",\n\t\"animal\": \"White Tiger\",\n\t\"outfit\": \"White robe withn green and yellow colors in the neck....\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        800,
+        208
+      ],
+      "id": "5d034a76-47cf-4829-bf86-36d6fa810664",
+      "name": "Structured Output Parser"
     }
   ],
   "pinData": {},
@@ -132,6 +151,17 @@
           }
         ]
       ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -141,6 +171,7 @@
   },
   "versionId": "e4f030f3-3319-40e2-a725-b8800abc9db6",
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "a7d4431609307ce85e4789089295262ee5d2dbebee0e24a6883758a2829b17b1"
   },
   "id": "5d2pS8l7fCvCgsrI",
