@@ -213,7 +213,7 @@
         48
       ],
       "id": "3d12097a-2a31-40c5-8f62-1f25bda031cb",
-      "name": "HTTP Request"
+      "name": "Download videos"
     }
   ],
   "pinData": {},
@@ -304,7 +304,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request",
+            "node": "Download videos",
             "type": "main",
             "index": 0
           }
@@ -317,7 +317,7 @@
     "executionOrder": "v1",
     "availableInMCP": false
   },
-  "versionId": "b05c533d-ef29-45c9-9c71-bbfda3fb5c45",
+  "versionId": "3e54a273-5f42-41c9-a376-b11983f43d95",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "a7d4431609307ce85e4789089295262ee5d2dbebee0e24a6883758a2829b17b1"
